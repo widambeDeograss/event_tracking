@@ -4,11 +4,14 @@ import React from 'react';
 import { Layout, Menu, Dropdown, Avatar, Typography, Space, Badge, MenuProps } from 'antd';
 import { BellOutlined, UserOutlined, LogoutOutlined, ExclamationCircleOutlined, StarOutlined } from '@ant-design/icons';
 import modal from 'antd/es/modal';
+import { useAuth } from '@/context';
 
 const { Header } = Layout;
 const { Title } = Typography;
 
 const TopBar = () => {
+  const token =localStorage.getItem('authToken');
+  const {user} = useAuth();
     const items: MenuProps["items"] = [
         {
           key: "1",
@@ -81,12 +84,13 @@ const TopBar = () => {
       
   
     return (
-      <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className='mx-2 rounded-2xl my-5 bg-white/20 xl:mx-20 sm:mx-2'>
+    <>
+     {token &&  <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className='mx-2 rounded-2xl my-5 bg-white/20 xl:mx-20 sm:mx-2'>
         <p  className='text-sm leading-none font-bold text-white'>Event Tracking System</p>
         
         <Space size="middle">
           <span  className="flex flex-col text-white">
-            <p className='text-xs font-semibold'>lukundojr@gmail.com</p>
+            <p className='text-xs font-semibold'>{user?.email}</p>
             <p className='text-xs'>system admin</p>
           </span>
           <Dropdown menu={{ items }} >
@@ -97,7 +101,8 @@ const TopBar = () => {
             </a>
           </Dropdown>
         </Space>
-      </Header>
+      </Header>}
+    </>
     );
   };
   

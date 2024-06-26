@@ -35,12 +35,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const data = await response.json();
             setUser(data);
           } else {
-            localStorage.removeItem('authToken');
+            // localStorage.removeItem('authToken');
             setUser(null);
           }
         } catch (error) {
           console.error('Error fetching user:', error);
-          localStorage.removeItem('authToken');
+          // localStorage.removeItem('authToken');
           setUser(null);
         }
       }

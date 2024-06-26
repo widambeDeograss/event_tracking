@@ -8,7 +8,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
     const ComponentWithAuth = (props: any) => {
       const { user } = useAuth();
       const router = useRouter();
-      const token =localStorage.getItem('token');
+      const token =localStorage.getItem('authToken');
   
       useEffect(() => {
         if (!token) {
