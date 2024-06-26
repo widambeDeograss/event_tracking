@@ -1,6 +1,7 @@
 "use client"
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { BASE_URL } from '@/constants/baseUrl';
 
 interface User {
   id: number;
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const token = localStorage.getItem('authToken');
       if (token) {
         try {
-          const response = await fetch('http://127.0.0.1:8000/api/auth/current_loogged_user', {
+          const response = await fetch(BASE_URL + 'api/auth/current_loogged_user', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (username: string, password: string) => {
     try {
     
-      const response = await fetch('http://127.0.0.1:8000/api/auth/login', {
+      const response = await fetch(BASE_URL +'api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -84,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const token = localStorage.getItem('authToken');
       if (token) {
-        const response = await fetch('/api/auth/logout', {
+        const response = await fetch( BASE_URL +'api/auth/logout', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
