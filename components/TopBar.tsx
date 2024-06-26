@@ -10,8 +10,8 @@ const { Header } = Layout;
 const { Title } = Typography;
 
 const TopBar = () => {
-  const token = "nbjjbjh";
   const {user} = useAuth();
+  const token = localStorage.getItem("authToken");
     const items: MenuProps["items"] = [
         {
           key: "1",

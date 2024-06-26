@@ -6,11 +6,14 @@ import { WalletOutlined, CreditCardFilled } from "@ant-design/icons";
 import withAuth from "@/middleware/protectroutes";
 import axios from "axios";
 import { BASE_URL } from "@/constants/baseUrl";
+import { useRouter } from "next/navigation";
 
 function Home() {
   const [stats, setStats] = useState<any>(null);
   const [ticketHistory, setTicketHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("authToken");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -36,6 +39,15 @@ function Home() {
     fetchStats();
     fetchTicketHistory();
   }, []);
+
+  useEffect(() => {
+    if (token) {
+        return;
+    }{
+     router.push("/login");
+    }
+  }, [])
+  
 
   const columns = [
     {
