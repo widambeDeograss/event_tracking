@@ -4,11 +4,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import Link from 'next/link';
+import {useRouter} from "next/navigation";
 import { BASE_URL, MEDIA_URL } from '@/constants/baseUrl';
 
 const EventsListPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   async function loadEvents() {
   await  axios.get(BASE_URL +'api/events?querytype=all')
@@ -99,9 +101,9 @@ const EventsListPage = () => {
       title: 'Actions',
       key: 'actions',
       render: (text:any, record:any) => (
-        <div>
-          <Link href={`/events/addevent`}>
-            <Button type="primary" style={{ marginRight: 8 }}>Edit</Button>
+        <div className="flex">
+          <Link href={`/events/${record.id}`}>
+            <Button type="primary" >View</Button>
           </Link>
           <Popconfirm
             title="Are you sure delete this event?"
@@ -110,6 +112,17 @@ const EventsListPage = () => {
             cancelText="No"
           >
             <Button type="dashed">Delete</Button>
+          </Popconfirm>
+          <Popconfirm
+              title="Are you sure edit this event?"
+              onConfirm={() => {
+                localStorage.setItem("eventToEdit", record.id);
+                router.push("/events/addevent");
+              }}
+              okText="Yes"
+              cancelText="No"
+          >
+            <Button type="dashed">Edit</Button>
           </Popconfirm>
         </div>
       ),
@@ -122,11 +135,11 @@ const EventsListPage = () => {
         <Link href="/addevent">
          Add Event
         </Link>
-        <Table 
-          dataSource={dataSource} 
-          columns={columns} 
-          loading={loading} 
-          rowKey="id" 
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          loading={loading}
+          rowKey="id"
           className='overflow-x-scroll'
         />
       </Card>

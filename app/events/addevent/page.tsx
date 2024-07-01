@@ -14,7 +14,7 @@ const AddEditEventPage = () => {
   const [loading, setLoading] = useState(true);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
- const id = ""
+ const id = localStorage.getItem("eventToEdit")
 
   useEffect(() => {
     loadArtists();
@@ -28,7 +28,7 @@ const AddEditEventPage = () => {
 
   const loadArtists = async () => {
     try {
-      const response = await axios.get(BASE_URL +'api/auth/user-information?querytype=artists'); 
+      const response = await axios.get(BASE_URL +'api/auth/user-information?querytype=artists');
       setArtists(response.data);
     } catch (error) {
       console.error('There was an error fetching the artists!', error);
@@ -37,7 +37,8 @@ const AddEditEventPage = () => {
 
   const loadEvent = async (eventId:any) => {
     try {
-      const response = await axios.get(`/api/events/${eventId}`);
+      const response = await axios.get(`${BASE_URL}api/events?querytype=single&&eventId=${eventId}`);
+      console.log(response)
       const event = response.data;
       form.setFieldsValue({
         ...event,
@@ -67,7 +68,7 @@ const AddEditEventPage = () => {
     }
     try {
       const apiCall = id ? axios.put : axios.post;
-      const url = id ? `${BASE_URL}/api/events/${id}` :  `${BASE_URL}/api/events`;
+      const url = id ? `${BASE_URL}api/events/${id}` :  `${BASE_URL}api/events`;
 
       await apiCall(url, formData, {
         headers: {
@@ -76,7 +77,8 @@ const AddEditEventPage = () => {
       });
 
       message.success(`Event ${id ? 'updated' : 'added'} successfully`);
-      // router.push('/');
+      localStorage.removeItem('eventToEdit');
+      // router.push('/events');
     } catch (error) {
       console.error(`There was an error ${id ? 'updating' : 'adding'} the event!`, error);
       message.error(`There was an error ${id ? 'updating' : 'adding'} the event`);
@@ -88,7 +90,7 @@ const AddEditEventPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col justify-between">
+    <div className="flex min-h-screen flex-col justify-between z-50 mb-5">
       <Card className='p-1' title={`${id ? 'Edit' : 'Add'} Event`}>
         <Form
           layout="vertical"
